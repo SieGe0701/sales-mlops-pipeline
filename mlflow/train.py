@@ -7,6 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import os
 
+mlflow.set_tracking_uri("http://localhost:5000")
+
+
 # -------- 1. Prepare Data --------
 def load_data():
     # Load Walmart sales dataset

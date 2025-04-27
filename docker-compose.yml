@@ -10,10 +10,41 @@ services:
       - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
       - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
     volumes:
-      - ./mlruns:/mlflow/mlruns  # Save experiments locally
-      - ./artifacts:/mlflow/artifacts  # Save model artifacts locally
+      - ./mlruns:/mlflow/mlruns
+      - ./artifacts:/mlflow/artifacts
     command: >
       mlflow server 
       --backend-store-uri /mlflow/mlruns 
       --default-artifact-root /mlflow/artifacts 
       --host 0.0.0.0
+
+  airflow-webserver:
+    image: apache/airflow:2.8.1
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      - airflow-scheduler
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////usr/local/airflow/airflow.db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    command: webserver
+
+  airflow-scheduler:
+    image: apache/airflow:2.8.1
+    container_name: airflow-scheduler
+    restart: always
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////usr/local/airflow/airflow.db
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+    command: scheduler
