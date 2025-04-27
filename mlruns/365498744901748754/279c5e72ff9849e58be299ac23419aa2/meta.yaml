@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/college/Projects/MLops/sales-mlops-pipeline/mlruns/365498744901748754/279c5e72ff9849e58be299ac23419aa2/artifacts
+end_time: 1745740882815
+entry_point_name: ''
+experiment_id: '365498744901748754'
+lifecycle_stage: active
+run_id: 279c5e72ff9849e58be299ac23419aa2
+run_name: handsome-toad-767
+run_uuid: 279c5e72ff9849e58be299ac23419aa2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1745740874073
+status: 3
+tags: []
+user_id: sprab

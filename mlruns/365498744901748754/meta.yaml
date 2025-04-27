@@ -1,0 +1,6 @@
+artifact_location: file:///D:/college/Projects/MLops/sales-mlops-pipeline/mlruns/365498744901748754
+creation_time: 1745740873187
+experiment_id: '365498744901748754'
+last_update_time: 1745740873187
+lifecycle_stage: active
+name: Walmart_Sales_Prediction_XGBoost
