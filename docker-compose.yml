@@ -10,8 +10,7 @@ services:
       - MLFLOW_TRACKING_URI=http://0.0.0.0:5000
       - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
     volumes:
-      - ./mlruns:/mlflow/mlruns
-      - ./artifacts:/mlflow/artifacts
+      - ./mlflow:/mlflow   # 👈 Store artifacts and mlruns inside /mlflow
     command: >
       mlflow server 
       --backend-store-uri /mlflow/mlruns 
@@ -25,15 +24,16 @@ services:
     depends_on:
       - airflow-scheduler
     environment:
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////usr/local/airflow/airflow.db
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
     ports:
       - "8080:8080"
     volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/dags:/opt/airflow/dags      # Mount DAGs
+      - ./mlflow:/mlflow                      # So that Airflow can run train.py
+      - ./airflow/logs:/opt/airflow/logs       # Store logs
+      - ./airflow/airflow.db:/opt/airflow/airflow.db # Persist sqlite db
     command: webserver
 
   airflow-scheduler:
@@ -41,10 +41,11 @@ services:
     container_name: airflow-scheduler
     restart: always
     environment:
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////usr/local/airflow/airflow.db
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
     volumes:
       - ./airflow/dags:/opt/airflow/dags
+      - ./mlflow:/mlflow
       - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/airflow.db:/opt/airflow/airflow.db
     command: scheduler

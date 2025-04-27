@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+.venv/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Airflow-specific
+airflow/airflow.db
+airflow/logs/
+airflow/__pycache__/
+airflow/plugins/__pycache__/
+
+# MLflow Artifacts and Tracking files
+mlflow/mlruns/
+mlruns/
+artifacts/
+
+# Data and model outputs
+data/
+model/
+
+# Docker
+*.tar
+docker/*
+
+# Kubernetes YAML outputs
+k8s/*
+
+# Monitoring
+monitoring/*.json
+monitoring/__pycache__/
+
+# General
+.DS_Store
+.env
+.env.*
+
+# VSCode settings
+.vscode/
+
+# System files
+Thumbs.db
